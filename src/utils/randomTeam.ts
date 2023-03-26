@@ -1,5 +1,5 @@
-import type { championType } from "./fetchData"
+import type { championType } from './fetchData';
 
-export const randomTeam = (champList: championType[], players=5) => {
-	return champList.sort(() => .5 - Math.random()).slice(0, players);
-}
+export const randomTeam = (champList: championType[], players = 5) => {
+	return champList.sort(() => 0.5 - Math.random()).slice(0, players);
+};
