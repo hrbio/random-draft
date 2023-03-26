@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Champion from './components/Champion.svelte';
-import './styles/global.css';
+	import RefreshIcon from './components/RefreshIcon.svelte';
+	import SettingsIcon from './components/SettingsIcon.svelte';
+	import './styles/global.css';
 	import {
 		availableChampions,
 		fetchData,
@@ -20,19 +22,32 @@ import './styles/global.css';
 		})();
 </script>
 
-<main class="flex flex-col items-center justify-center">
+<main class="flex flex-col items-center justify-between h-screen">
 	<h1>Random League of Legends draft</h1>
-	<div class="flex gap-3">
-		<div>
-			{#each teamOneChampions as champ (champ.id)}
-				<Champion {...champ}></Champion>
-			{/each}
+	<div class="flex flex-col items-center">
+		<div class="flex gap-5 pb-8">
+			<button on:click={() => {
+				fetchData();
+			}}>
+				<RefreshIcon></RefreshIcon>
+			</button>
+			<button>
+				<SettingsIcon></SettingsIcon>
+			</button>
 		</div>
-		<p>vs</p>
-		<div class="">
-			{#each teamTwoChampions as champ (champ.id)}
-				<Champion {...champ}></Champion>
-			{/each}
+		<div class="flex gap-10 items-center">
+			<div class="flex flex-col gap-1">
+				{#each teamOneChampions as champ (champ.id)}
+					<Champion {...champ} right={true}/>
+				{/each}
+			</div>
+			<span class="font-bold text-4xl">vs.</span>
+			<div class="flex flex-col gap-1">
+				{#each teamTwoChampions as champ (champ.id)}
+					<Champion {...champ} />
+				{/each}
+			</div>
 		</div>
 	</div>
+	<footer></footer>
 </main>
