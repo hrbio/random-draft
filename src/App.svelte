@@ -1,5 +1,6 @@
 <script lang="ts">
-	import './styles/global.css';
+	import Champion from './components/Champion.svelte';
+import './styles/global.css';
 	import {
 		availableChampions,
 		fetchData,
@@ -23,14 +24,14 @@
 	<h1>Random League of Legends draft</h1>
 	<div class="flex gap-3">
 		<div>
-			{#each teamOneChampions as {id, name} (id)}
-				<p>{name}</p>
+			{#each teamOneChampions as champ (champ.id)}
+				<Champion {...champ}></Champion>
 			{/each}
 		</div>
 		<p>vs</p>
 		<div class="">
-			{#each teamTwoChampions as {id, name} (id)}
-				<p>{name}</p>
+			{#each teamTwoChampions as champ (champ.id)}
+				<Champion {...champ}></Champion>
 			{/each}
 		</div>
 	</div>
