@@ -2,7 +2,7 @@ import axios from 'axios';
 import { writable } from 'svelte/store';
 import { z } from 'zod';
 
-const REGIONS_URL = 'https://ddragon.leagueoflegends.com/realms/eune.json'
+const REGIONS_URL = 'http://ddragon.leagueoflegends.com/realms/eune.json'
 
 export const availableChampions = writable<championType[]>([]);
 
