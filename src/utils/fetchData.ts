@@ -10,7 +10,7 @@ export const fetchNewestVersion = async () => {
 	const res = await axios.get(REGIONS_URL);
 	if (res.status != 200)
 		throw new Error("Couldn't fetch newest data version.");
-	return res.data.v;
+	return res.data.v as string;
 };
 
 const championSchema = z.object({
