@@ -9,7 +9,9 @@ import SettingsIcon from './components/SettingsIcon.svelte';
 	import type { player } from './utils/playerType';
 	import { randomTeam } from './utils/randomTeam';
 
-	fetchData();
+	// fetchData();
+
+	let noPlayers = 5;
 
 	let teamOnePlayers: player[];
 	let teamTwoPlayers: player[];
@@ -28,6 +30,7 @@ import SettingsIcon from './components/SettingsIcon.svelte';
 </script>
 
 <main class="flex flex-col items-center justify-between h-screen">
+	{noPlayers}
 	<h1>Random League of Legends draft</h1>
 	<div class="flex flex-col items-center">
 		<div class="flex gap-5 pb-8">
@@ -39,7 +42,6 @@ import SettingsIcon from './components/SettingsIcon.svelte';
 		<div class="flex gap-10 items-center">
 
 			<div class="flex flex-col gap-1">
-
 			</div>
 
 			<span class="font-bold text-4xl">vs.</span>
@@ -52,7 +54,9 @@ import SettingsIcon from './components/SettingsIcon.svelte';
 	<footer></footer>
 	{#if showModal}
 		<Modal on:click={toggleModal}>
-			<p>Settings</p>
+			<div>
+				<input type="number" min=0 max=5 step=1 bind:value={noPlayers}>
+			</div>
 		</Modal>
 	{/if}
 </main>
