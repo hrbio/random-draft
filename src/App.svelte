@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Champion from './components/Champion.svelte';
 	import Modal from './components/Modal.svelte';
+	import RefreshIcon from './components/RefreshIcon.svelte';
 	import SettingsIcon from './components/SettingsIcon.svelte';
 	import './styles/global.css';
 	import { availableChampions, fetchData } from './utils/fetchData';
@@ -21,6 +22,7 @@
 	$: {
 		teamOnePlayers = getEmptyTeam(noPlayers);
 		teamTwoPlayers = getEmptyTeam(noPlayers);
+		loadChampions()
 	}
 
 	$: {
@@ -66,6 +68,9 @@
 	<h1>Random League of Legends draft</h1>
 	<div class="flex flex-col items-center">
 		<div class="flex gap-5 pb-8">
+			<button on:click={loadChampions}>
+				<RefreshIcon></RefreshIcon>
+			</button>
 			<button on:click={toggleModal}>
 				<SettingsIcon />
 			</button>
