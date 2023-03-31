@@ -1,15 +1,11 @@
 <script lang="ts">
+	import Champion from './components/Champion.svelte';
 	import Modal from './components/Modal.svelte';
-import SettingsIcon from './components/SettingsIcon.svelte';
+	import SettingsIcon from './components/SettingsIcon.svelte';
 	import './styles/global.css';
-	import {
-		availableChampions,
-		fetchData,
-	} from './utils/fetchData';
-	import type { player } from './utils/playerType';
-	import { randomTeam } from './utils/randomTeam';
-
-	// fetchData();
+	import { availableChampions, fetchData } from './utils/fetchData';
+	import { getEmptyTeam, type player } from './utils/fillPlayers';
+	import { randomTeam, rerollChamion } from './utils/randomTeam';
 
 	let noPlayers = 5;
 
@@ -20,42 +16,101 @@ import SettingsIcon from './components/SettingsIcon.svelte';
 
 	const toggleModal = () => {
 		showModal = !showModal;
+	};
+
+	$: {
+		teamOnePlayers = getEmptyTeam(noPlayers);
+		teamTwoPlayers = getEmptyTeam(noPlayers);
 	}
 
-	$: $availableChampions,
-		(() => {
-			const championTeamOne = randomTeam($availableChampions);
-			const championTeamTwo = randomTeam($availableChampions);
-		})();
+	$: {
+		$availableChampions;
+		loadChampions();
+	}
+
+	const loadChampions = () => {
+		if ($availableChampions.length > 0) {
+			const chosenChampions = randomTeam(
+				$availableChampions,
+				noPlayers * 2
+			);
+			teamOnePlayers = teamOnePlayers.map((e, i) => {
+				return { ...e, champion: chosenChampions[i] };
+			});
+			teamTwoPlayers = teamTwoPlayers.map((e, i) => {
+				return { ...e, champion: chosenChampions[i + noPlayers] };
+			});
+		}
+	};
+
+	const handleTeamOneReroll = (index: number) => {
+		teamOnePlayers[index].champion = rerollChamion(
+			teamOnePlayers,
+			index,
+			$availableChampions
+		);
+	};
+
+	const handleTeamTwoReroll = (index: number) => {
+		teamTwoPlayers[index].champion = rerollChamion(
+			teamTwoPlayers,
+			index,
+			$availableChampions
+		);
+	};
+
+	fetchData();
 </script>
 
-<main class="flex flex-col items-center justify-between h-screen">
-	{noPlayers}
+<main class="flex h-screen flex-col items-center justify-between">
 	<h1>Random League of Legends draft</h1>
 	<div class="flex flex-col items-center">
 		<div class="flex gap-5 pb-8">
 			<button on:click={toggleModal}>
-				<SettingsIcon></SettingsIcon>
+				<SettingsIcon />
 			</button>
 		</div>
 
-		<div class="flex gap-10 items-center">
-
+		<div class="flex items-center gap-10">
 			<div class="flex flex-col gap-1">
+				{#each teamOnePlayers as player (player.id)}
+					<Champion
+						playerName={player.playerName}
+						champion={player.champion}
+						on:click={() => {
+							handleTeamOneReroll(player.id);
+						}}
+					/>
+				{/each}
 			</div>
 
-			<span class="font-bold text-4xl">vs.</span>
+			<span class="text-4xl font-bold">vs.</span>
 
 			<div class="flex flex-col gap-1">
-
+				{#each teamTwoPlayers as player (player.id)}
+					<Champion
+						playerName={player.playerName}
+						champion={player.champion}
+						right
+						on:click={() => {
+							handleTeamTwoReroll(player.id);
+						}}
+					/>
+				{/each}
 			</div>
 		</div>
 	</div>
-	<footer></footer>
+	<footer />
 	{#if showModal}
 		<Modal on:click={toggleModal}>
 			<div>
-				<input type="number" min=0 max=5 step=1 bind:value={noPlayers}>
+				<input
+					type="number"
+					min="0"
+					max="5"
+					step="1"
+					bind:value={noPlayers}
+				/>
 			</div>
 		</Modal>
 	{/if}

@@ -1,25 +1,35 @@
 <script lang="ts">
-	export let name: string;
-	export let id: string;
+	import type { championType } from '../utils/fetchData';
+
+	export let playerName: string;
+	export let champion: championType | undefined = undefined;
 	export let right = false;
 </script>
 
-<div
-	class="relative h-36 bg-black cursor-pointer"
->
-	<img
-		src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${id}_0.jpg`}
-		alt=""
-		class="h-36"
-	/>
-	<span
-		class="absolute bottom-0 text-white font-semibold text-xl px-2 z-10"
-		class:right-0={right}>{name}</span
-	>
-</div>
+<button class="relative h-36 cursor-pointer bg-black" on:click>
+	{#if champion != undefined}
+		<img
+			src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion.id}_0.jpg`}
+			alt=""
+			class="h-36"
+		/>
+		<span
+			class={`absolute bottom-7 z-10 px-2 font-semibold text-neutral-400 ${
+				right ? 'right-0' : 'left-0'
+			}`}
+			>{playerName}
+		</span>
+		<span
+			class={`absolute bottom-0 z-10 px-2 text-2xl font-semibold text-white ${
+				right ? 'right-0' : 'left-0'
+			}`}
+			>{champion.name}
+		</span>
+	{/if}
+</button>
 
 <style>
-	div::before {
+	button::before {
 		content: '';
 		position: absolute;
 		width: 100%;
@@ -36,7 +46,7 @@
 		transition: background-position 0.15s ease-in;
 	}
 
-	div:hover::before {
+	button:hover::before {
 		background-position-y: 100%;
 	}
 </style>
